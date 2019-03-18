@@ -5,22 +5,31 @@ import emitter from './emitter'
 
 export default class {
     constructor(url, opts = {}) {
-        this.url = url
-        this.opts = opts
         this.start(url, opts)
     }
 
     start(url, opts = {}) {
+        let itvl = opts.interval || 2000
+        let maxf = opts.maxFails || 5
+
         this.stop()
+
+        let failures = 0
         this.timerID = setInterval(() => {
             axios.get(url)
             .then((resp) => {
+                failures = 0
                 emitter.emit(url, resp)
             })
             .catch((error) => {
+                failures++
                 console.log(error)
+                if (failures >= maxf) {
+                    console.log("exceeding max continuous failure times")
+                    this.stop()
+                }
             })
-        }, opts.interval || 5000)
+        }, itvl)
     }
 
     stop() {

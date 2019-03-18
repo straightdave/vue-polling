@@ -9,8 +9,6 @@ const hasProxy = typeof Proxy !== 'undefined' &&
 
 export default {
     install(Vue) {
-        console.log(`[vue-polling] Proxy ${hasProxy ? 'is' : 'is not'} supported.`)
-
         if (!observerMap) {
             throw new Error('[vue-polling] observer map is undefined or null.')
         }
@@ -19,9 +17,9 @@ export default {
             observers:   observerMap,
 
             // shortcuts
-            addObserver:    observerMap.add,
-            removeObserver: observerMap.remove,
-            clear:          observerMap.clear
+            addObserver:    observerMap.add.bind(observerMap),
+            removeObserver: observerMap.remove.bind(observerMap),
+            clear:          observerMap.clear.bind(observerMap)
         }
 
         Vue.mixin({
@@ -40,11 +38,13 @@ export default {
                             // target is in a key-value pattern, only one callback
                             // could be stored by one url
                             target[prop] = value
+                            return true
                         },
 
                         deleteProperty(target, prop) {
                             emitter.removeListener(prop, vm.$options.listeners[prop], vm)
                             delete target.prop
+                            return true
                         }
                     })
 
