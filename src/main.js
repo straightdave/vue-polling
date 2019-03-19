@@ -27,6 +27,8 @@ export default {
                 let vm = this
                 let listeners = this.$options['listeners']
 
+                console.log(`[vue-polling] $options = ${JSON.stringify(this.$options)}`)
+
                 if (hasProxy) {
                     this.$options.listeners = new Proxy({}, {
                         set(target, prop, value) {
