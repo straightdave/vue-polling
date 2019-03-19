@@ -9,6 +9,8 @@ const hasProxy = typeof Proxy !== 'undefined' &&
 
 export default {
     install(Vue) {
+        console.log(`[vue-polling] Proxy supported: ${hasProxy}`)
+
         if (!observerMap) {
             throw new Error('[vue-polling] observer map is undefined or null.')
         }

@@ -19,7 +19,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@vue/app']
+            presets: ['@babel/preset-env']
           }
         }
       }

@@ -2,7 +2,7 @@
   "name": "vue-polling",
   "version": "0.1.4",
   "description": "Vue plugin for polling backend APIs",
-  "main": "dist/build.js",
+  "main": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "eslint --ext .js src && webpack --progress --hide-modules",
@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
-    "@vue/babel-preset-app": "^3.5.1",
     "axios": "^0.18.0",
     "uuid": "^3.3.2",
     "vue": "^2.6.9"
