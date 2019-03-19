@@ -19,6 +19,7 @@ class Emitter {
                 callback: callback,
                 vm: vm
             })
+            return
         }
         throw new Error('[vue-polling] callback not a function')
     }
