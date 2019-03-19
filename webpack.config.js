@@ -1,8 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  mode: 'production',
-  entry: './src/main.js',
+  entry: ['./src/main.js'],
   output: {
     filename: 'build.js',
     path: path.resolve(__dirname, 'dist')
@@ -20,7 +19,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: ['@vue/app']
           }
         }
       }
