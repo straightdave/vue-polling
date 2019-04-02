@@ -16,7 +16,9 @@ class ObserverMap {
     }
 
     remove(url) {
-        this.observers.delete(url.trim())
+        const key = url.trim()
+        this.observers.get(key).stop()
+        this.observers.delete(key)
     }
 
     clear() {
