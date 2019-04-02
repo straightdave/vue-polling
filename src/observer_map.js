@@ -33,7 +33,7 @@ class ObserverMap {
         this.observers.forEach((v) => {
             v.stop()
         })
-        delete this.observers
+        this.observers.clear()
     }
 }
 
