@@ -7,7 +7,7 @@ class ObserverMap {
         this.observers = new Map()
     }
 
-    getOnce(url) {
+    getOne(url) {
         return this.observers.get(url.trim())
     }
 
