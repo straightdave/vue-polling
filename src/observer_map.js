@@ -7,6 +7,14 @@ class ObserverMap {
         this.observers = new Map()
     }
 
+    getOnce(url) {
+        return this.observers.get(url.trim())
+    }
+
+    getAll() {
+        return this.observers
+    }
+
     add(url, opts = {}) {
         let k = url.trim()
         if (this.observers.has(k)) {
@@ -16,9 +24,9 @@ class ObserverMap {
     }
 
     remove(url) {
-        const key = url.trim()
-        this.observers.get(key).stop()
-        this.observers.delete(key)
+        const k = url.trim()
+        this.observers.get(k).stop()
+        this.observers.delete(k)
     }
 
     clear() {

@@ -21,7 +21,9 @@ export default {
             // shortcuts
             addObserver:    observerMap.add.bind(observerMap),
             removeObserver: observerMap.remove.bind(observerMap),
-            clear:          observerMap.clear.bind(observerMap)
+            clear:          observerMap.clear.bind(observerMap),
+            getOne:         observerMap.getOne.bind(observerMap),
+            getAll:         observerMap.getAll.bind(observerMap)
         }
 
         Vue.mixin({
