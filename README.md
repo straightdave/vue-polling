@@ -13,7 +13,10 @@ or with opts:
 ```js
 this.$polling.addObserver(url, {
     interval: 5000, // 2000ms by default
-    maxFails: 10    // break after 5 continuous failures
+    maxFails: 10,    // break after 5 continuous failures
+    headers: {
+        'Content-Type': 'application/json'
+    }
 })
 ```
 

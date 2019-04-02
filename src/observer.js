@@ -16,7 +16,11 @@ export default class {
 
         let failures = 0
         this.timerID = setInterval(() => {
-            axios.get(url)
+            axios({
+                method: 'get',
+                url: url,
+                headers: opts.headers
+            })
             .then((resp) => {
                 failures = 0
                 emitter.emit(url, resp)
