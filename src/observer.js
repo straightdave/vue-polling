@@ -1,7 +1,7 @@
 /* Dave Wu, 2019 */
 
 import axios from 'axios'
-import emitter from './emitter'
+import emitter from './emitter.js'
 
 export default class {
     constructor(url, opts = {}) {

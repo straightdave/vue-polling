@@ -1,7 +1,7 @@
 /* Dave Wu, 2019 */
 
-import observerMap from './observer_map'
-import emitter from './emitter'
+import observerMap from './observer_map.js'
+import emitter from './emitter.js'
 
 const hasProxy = typeof Proxy !== 'undefined' &&
                  typeof Proxy === 'function' &&

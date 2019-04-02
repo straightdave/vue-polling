@@ -23,20 +23,20 @@
   "homepage": "https://github.com/straightdave/vue-polling#readme",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
     "babel-loader": "^8.0.5",
-    "eslint": "^5.15.2",
+    "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "mocha": "^6.0.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.2.5",
+    "@babel/polyfill": "^7.4.0",
     "axios": "^0.18.0",
     "uuid": "^3.3.2",
-    "vue": "^2.6.9"
+    "vue": "^2.6.10"
   }
 }

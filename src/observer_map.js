@@ -1,6 +1,6 @@
 /* Dave Wu, 2019 */
 
-import Observer from './observer'
+import Observer from './observer.js'
 
 class ObserverMap {
     constructor() {

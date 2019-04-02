@@ -1,11 +1,11 @@
-// observer_map_test.js
+import observerMap from '../src/observer_map.js'
 
-import ObserverMap from '../src/observer_map'
+const BaseURL = 'http://localhost/'
 
-describe('ObserverMap', function() {
+describe('observerMap', function() {
     describe('#init', function() {
         it('should be non-null', function() {
-            if (!ObserverMap) {
+            if (!observerMap) {
                 assert.fail('Oops! blank object')
             }
         })
@@ -13,17 +13,15 @@ describe('ObserverMap', function() {
 
     describe('#add', function() {
         it('should add one observer', function() {
-            let o1 = ObserverMap.add('123', {})
-
-            let o2 = ObserverMap.add('456', {
-                headers: { 'Content-Type': 'application/json' }
+            let o2 = observerMap.add(BaseURL, {
+                headers: { 'Content-Type': 'text/html' }
             })
 
-            if (ObserverMap.observers.size != 2) {
+            if (observerMap.observers.size != 1) {
                 assert.fail(`observers not right`)
             }
 
-            ObserverMap.clear()
+            observerMap.clear()
         })
     })
 })
