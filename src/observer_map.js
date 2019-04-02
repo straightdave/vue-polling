@@ -20,7 +20,9 @@ class ObserverMap {
         if (this.observers.has(k)) {
             this.observers.get(k).stop()
         }
-        this.observers.set(k, new Observer(k, opts))
+        let o = new Observer(k, opts)
+        this.observers.set(k, o)
+        return o
     }
 
     remove(url) {
