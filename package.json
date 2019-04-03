@@ -1,6 +1,6 @@
 {
   "name": "vue-polling",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Vue plugin for polling backend APIs",
   "main": "src/main.js",
   "scripts": {
