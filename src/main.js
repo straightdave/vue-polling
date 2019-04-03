@@ -3,18 +3,12 @@
 import observerMap from './observer_map.js'
 import emitter from './emitter.js'
 
-const hasProxy = typeof Proxy !== 'undefined' &&
-                 typeof Proxy === 'function' &&
-                 /native code/.test(Proxy.toString())
+const supportProxy = typeof Proxy !== 'undefined' &&
+                     typeof Proxy === 'function' &&
+                     /native code/.test(Proxy.toString())
 
 export default {
     install(Vue) {
-        console.log(`[vue-polling] Proxy supported: ${hasProxy}`)
-
-        if (!observerMap) {
-            throw new Error('[vue-polling] observer map is undefined or null.')
-        }
-
         Vue.prototype.$polling = {
             observers:   observerMap,
 
@@ -29,9 +23,11 @@ export default {
         Vue.mixin({
             created() {
                 let vm = this
+
+                // in case there's 'listeners' defined and used by others
                 let listeners = this.$options['listeners']
 
-                if (hasProxy) {
+                if (supportProxy) {
                     this.$options.listeners = new Proxy({}, {
                         set(target, prop, value) {
                             // pushing a callback (value here) into the list
@@ -46,12 +42,13 @@ export default {
                         },
 
                         deleteProperty(target, prop) {
-                            emitter.removeListener(prop, vm.$options.listeners[prop], vm)
+                            emitter.removeListener(prop, vm)
                             delete target.prop
                             return true
                         }
                     })
 
+                    // restore those 'listeners' defined by others
                     if (listeners) {
                         Object.keys(listeners).forEach((key) => {
                             this.$options.listeners[key] = listeners[key]
@@ -62,17 +59,6 @@ export default {
                     if (listeners) {
                         Object.keys(listeners).forEach((key) => {
                             emitter.addListener(key, listeners[key], vm)
-                        })
-                    }
-                }
-            },
-
-            beforeDestroy() {
-                if (hasProxy) {
-                    let listeners = this.$options['listeners']
-                    if (listeners) {
-                        Object.keys(listeners).forEach((key) => {
-                            delete this.$options.listeners[key]
                         })
                     }
                 }

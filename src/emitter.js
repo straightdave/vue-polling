@@ -3,20 +3,20 @@
 class Emitter {
     constructor() {
         // map key:   API url
-        // map value: list of {callback, vm}
+        // map value: [{cb, vm}, {cb, vm}, ...]
         this.listeners = new Map()
     }
 
     // Append a callback to the callback list for one url
     // url:      the backend API url
-    // callback: the callback
-    // vm:       the vue component instance
+    // callback: the callback func
+    // vm:       the vue instance
     addListener(url, callback, vm) {
         if (typeof callback === 'function') {
             const label = url.trim()
             this.listeners.has(label) || this.listeners.set(label, [])
             this.listeners.get(label).push({
-                callback: callback,
+                cb: callback,
                 vm: vm
             })
             return
@@ -24,33 +24,29 @@ class Emitter {
         throw new Error('[vue-polling] callback not a function')
     }
 
-    removeListener(url, callback, vm) {
+    removeListener(url, vm) {
         const label = url.trim()
 
-        if (!callback) {
-            // if no specific callback to remove,
-            // remove whole callback list for the url.
+        if (!vm) {
+            // if vm is not specified, remove the whole key
             this.listeners.delete(label)
             return
         }
 
-        let listeners = this.listeners.get(label)
-        let index
+        let callbacks = this.listeners.get(label)
 
-        if (listeners && listeners.length) {
-            index = listeners.reduce((i, listener, index) => {
-                if (typeof listener.callback === 'function' &&
-                    listener.callback === callback &&
-                    listener.vm === vm) {
-                    i = index
-                }
-                return i
-            }, -1)
+        if (callbacks && callbacks.length) {
+            const cbNotInThisVM = callbacks.filter(callback => callback.vm !== vm)
 
-            if (index > -1) {
-                listeners.splice(index, 1)
-                this.listeners.set(label, listeners)
+            if (cbNotInThisVM.length == 0) {
+                // if no callbacks remained (that is, all callbacks
+                // for such url are defined in this vm),
+                // remove the whole key
+                this.listeners.delete(label)
+                return
             }
+
+            this.listeners.set(label, cbNotInThisVM)
         }
     }
 
@@ -59,7 +55,7 @@ class Emitter {
 
         if (listeners && listeners.length) {
             listeners.forEach((listener) => {
-                listener.callback.call(listener.vm, ...args)
+                listener.cb.call(listener.vm, ...args)
             })
         }
     }

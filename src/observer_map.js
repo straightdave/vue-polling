@@ -18,7 +18,8 @@ class ObserverMap {
     add(url, opts = {}) {
         let k = url.trim()
         if (this.observers.has(k)) {
-            this.observers.get(k).stop()
+            let oo = this.observers.get(k)
+            oo && oo.stop()
         }
         let o = new Observer(k, opts)
         this.observers.set(k, o)
@@ -27,7 +28,10 @@ class ObserverMap {
 
     remove(url) {
         const k = url.trim()
-        this.observers.get(k).stop()
+        if (this.observers.has(k)) {
+            let oo = this.observers.get(k)
+            oo && oo.stop()
+        }
         this.observers.delete(k)
     }
 

@@ -1,67 +1,90 @@
 import Vue from 'vue'
 import VuePolling from '../src/main.js'
+import emitter from '../src/emitter.js'
+import assert from 'assert'
+Vue.use(VuePolling)
 
 const BaseURL = 'http://localhost/'
 
-describe('Main', function() {
-    describe('Basic works', function() {
-        it('no $polling before Vue.use', function() {
-            let v = new Vue({
-                el: '#app'
-            })
+describe('Main', () => {
+    describe('Basic works', () => {
+        it('could add & delete listeners via $options', () => {
+            console.log(`listeners: ${emitter.listeners.size}`)
 
-            if (!v) {
-                assert.fail('vue instance is null')
-            }
-
-            if (v.$polling) {
-                assert.fail('$polling is NOT null')
-            }
-        })
-
-        it('could add listener', function() {
-            Vue.use(VuePolling)
-
-            let v = new Vue({
-                el: '#app'
-            })
-
-            if (!v) {
-                assert.fail('vue instance is null')
-            }
-
-            if (!v.$polling) {
-                assert.fail('$polling is null')
-            }
-
-            let count = 0
-            v.$options.listeners[BaseURL] = (resp) => {
-                console.log(`#1 ${resp.data}`)
-                count++
-                if (count > 5) {
-                    v.$polling.clear()
+            const vm = new Vue({
+                template: '<div>dummy</div>',
+                created() {
+                    console.log('#1 vm is created')
+                    this.$options.listeners[BaseURL] = (resp) => {
+                        console.log(`#1 ${resp.data}`)
+                    }
+                    console.log(`listeners: ${emitter.listeners.size}`)
+                },
+                beforeDestroy() {
+                    console.log('#1 before destroy')
+                    delete this.$options.listeners[BaseURL]
+                },
+                destroyed() {
+                    console.log('#1 vm destroyed')
+                    console.log(`listeners: ${emitter.listeners.size}`)
                 }
-            }
+            }).$mount()
 
-            if (Object.keys(v.$options.listeners).length < 1) {
+            if (emitter.listeners.size == 0) {
                 assert.fail('still no listener')
             }
+
+            vm.$destroy()
         })
 
-        it('could add observer', function() {
-            Vue.use(VuePolling)
+        it('listeners should work as expected for multiple components', () => {
+            const vm1 = new Vue({
+                template: '<div>dummy1</div>',
+                created() {
+                    this.$options.listeners[BaseURL] = () => {
+                        console.log('#01 created')
+                    }
+                },
+                beforeDestroy() {
+                    delete this.$options.listeners[BaseURL]
+                }
+            }).$mount()
 
-            let v = new Vue({
-                el: '#app'
-            })
+            const vm2 = new Vue({
+                template: '<div>dummy2</div>',
+                created() {
+                    this.$options.listeners[BaseURL] = () => {
+                        console.log('#02 created')
+                    }
+                },
+                beforeDestroy() {
+                    delete this.$options.listeners[BaseURL]
+                }
+            }).$mount()
 
-            v.$polling.addObserver(BaseURL, {})
-
-            if (v.$polling.observers.size < 1) {
-                assert.fail('still no observer')
+            if (emitter.listeners.size != 1) {
+                assert.fail('same url should have only one listener')
             }
 
-            v.$polling.clear()
+            if (emitter.listeners.get(BaseURL).length != 2) {
+                assert.fail('should have two callbacks')
+            }
+
+            vm1.$destroy()
+
+            if (!emitter.listeners.has(BaseURL)) {
+                assert.fail('should have such url key')
+            }
+
+            if (emitter.listeners.get(BaseURL).length != 1) {
+                assert.fail('should have one callback left')
+            }
+
+            vm2.$destroy()
+
+            if (emitter.listeners.has(BaseURL)) {
+                assert.fail('should not have such url key')
+            }
         })
     })
 })
