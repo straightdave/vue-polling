@@ -30,8 +30,8 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "mocha": "^6.0.2",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.0",
